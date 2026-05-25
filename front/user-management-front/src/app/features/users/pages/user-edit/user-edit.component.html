@@ -1,0 +1,60 @@
+<div class="card">
+  <div class="row" style="margin-bottom:12px">
+    <a routerLink="/users" class="btn">Back</a>
+    <span class="spacer"></span>
+    <span class="badge">{{ isEdit ? 'Edit User' : 'Create User' }}</span>
+  </div>
+
+  @if (error) {
+    <div class="error">{{ error }}</div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <div class="form-grid">
+      <div>
+        <label>First Name</label>
+        <input class="input" formControlName="firstName" />
+        @if (form.controls.firstName.touched && form.controls.firstName.invalid) {
+          <div class="error">First name is required (max 80)</div>
+        }
+      </div>
+
+      <div>
+        <label>Last Name</label>
+        <input class="input" formControlName="lastName" />
+        @if (form.controls.lastName.touched && form.controls.lastName.invalid) {
+          <div class="error">Last name is required (max 80)</div>
+        }
+      </div>
+
+      <div>
+        <label>Email</label>
+        <input class="input" formControlName="email" />
+        @if (form.controls.email.touched && form.controls.email.invalid) {
+          <div class="error">Valid email is required</div>
+        }
+      </div>
+
+      <div>
+        <label>Phone</label>
+        <input class="input" formControlName="phone" />
+      </div>
+
+      <div>
+        <label>Status</label>
+        <div class="row">
+          <input type="checkbox" formControlName="active" />
+          <span>{{ form.controls.active.value ? 'Active' : 'Inactive' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:14px">
+      <button class="btn primary" type="submit" [disabled]="loading">Save</button>
+      <span class="spacer"></span>
+      @if (loading) {
+        <span class="badge">Saving...</span>
+      }
+    </div>
+  </form>
+</div>

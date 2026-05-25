@@ -1,0 +1,67 @@
+<div class="card">
+  <div class="row" style="margin-bottom:12px">
+    <app-search-bar (search)="onSearch($event)" />
+    <span class="spacer"></span>
+    <a routerLink="/users/new" class="btn primary">Create</a>
+  </div>
+
+  @if (error) {
+    <div class="error">{{ error }}</div>
+  }
+
+  @defer (when !loading) {
+    <table class="table" aria-label="Users table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Status</th>
+          <th style="width:220px">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (u of data.content; track trackById) {
+          <tr>
+            <td>{{ u.id }}</td>
+            <td>{{ u.firstName }} {{ u.lastName }}</td>
+            <td>{{ u.email }}</td>
+            <td>{{ u.phone || '-' }}</td>
+            <td>
+              @if (u.active) {
+                <span class="badge ok">Active</span>
+              } @else {
+                <span class="badge off">Inactive</span>
+              }
+            </td>
+            <td>
+              <div class="row">
+                <a class="btn" [routerLink]="['/users', u.id, 'edit']">Edit</a>
+                <button class="btn danger" type="button" (click)="onDelete(u)">Delete</button>
+              </div>
+            </td>
+          </tr>
+        }
+        @if (data.content.length === 0) {
+          <tr><td colspan="6" style="color:var(--muted)">No users found</td></tr>
+        }
+      </tbody>
+    </table>
+
+    <app-pagination
+      [page]="data.page"
+      [totalPages]="data.totalPages"
+      [totalElements]="data.totalElements"
+      (pageChange)="onPageChange($event)" />
+  }
+  @placeholder {
+    <div class="skeleton" style="margin-bottom:10px"></div>
+    <div class="skeleton" style="margin-bottom:10px"></div>
+    <div class="skeleton" style="margin-bottom:10px"></div>
+  }
+  @loading {
+    <div class="skeleton" style="margin-bottom:10px"></div>
+    <div class="skeleton" style="margin-bottom:10px"></div>
+  }
+</div>
